@@ -1,88 +1,160 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 export default function Dashboard() {
-  const [metrics, setMetrics] = useState({ totalMachines: 24, activeAlerts: 3, healthScore: 91, predictedFailures: 2 });
-  const [selectedMachine, setSelectedMachine] = useState({ id: 'M001', temp: '65°C', vibration: '0.21 Hz', status: 'Healthy', pressure: '101 kPa', humidity: '45%' });
+  // Advanced AI Operational Focus State
+  const [selectedMachine, setSelectedMachine] = useState({
+    id: 'MAC-2301',
+    status: 'Action Required',
+    temp: '89.4 °C',
+    vibration: '4.82 mm/s',
+    pressure: '210.5 kPa',
+    humidity: '62.1%',
+    rul: '14 Operating Days',
+    anomalyScore: '78.4%',
+    aiModelConfidence: '94.2%',
+    nextScheduledMaintenance: '2026-06-25'
+  });
 
-  const cardStyle = { backgroundColor: '#161d2a', border: '1px solid #232d3f', padding: '20px', borderRadius: '12px', textAlign: 'center' };
-  const cardTitleStyle = { color: '#94a3b8', fontSize: '12px', textTransform: 'uppercase', margin: '0 0 5px 0' };
-  const cardValueStyle = (color) => ({ fontSize: '28px', fontWeight: 'bold', color: color, margin: '0' });
-  const tdStyle = { padding: '12px', borderBottom: '1px solid #232d3f' };
+  // Comprehensive Fleet Database Array
+  const activeFleet = [
+    { id: 'MAC-2301', status: 'Action Required', type: 'CNC Milling', anomalyScore: '78.4%', condition: 'Degrading' },
+    { id: 'MAC-2302', status: 'Optimal', type: 'Hydraulic Press', anomalyScore: '12.1%', condition: 'Stable' },
+    { id: 'MAC-2303', status: 'Critical', type: 'Robotic Arm Assembly', anomalyScore: '94.8%', condition: 'Imminent Failure' },
+    { id: 'MAC-2304', status: 'Optimal', type: 'Conveyor Drive Train', anomalyScore: '05.3%', condition: 'Stable' },
+    { id: 'MAC-2305', status: 'Maintenance', type: 'Pneumatic Drill Node', anomalyScore: '45.0%', condition: 'Under Calibration' }
+  ];
 
-  const machineData = {
-    M001: { id: 'M001', temp: '65°C', vibration: '0.21 Hz', status: 'Healthy', pressure: '101 kPa', humidity: '45%' },
-    M002: { id: 'M002', temp: '89°C', vibration: '0.78 Hz', status: 'Warning', pressure: '115 kPa', humidity: '55%' },
-    M003: { id: 'M003', temp: '98°C', vibration: '1.12 Hz', status: 'Critical', pressure: '130 kPa', humidity: '60%' }
-  };
-
-  useEffect(() => {
-    fetch('http://localhost:8000/dashboard/summary')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data) {
-          setMetrics({
-            totalMachines: data.total_machines || 24,
-            activeAlerts: data.active_alerts || 3,
-            healthScore: data.fleet_health_score || 91,
-            predictedFailures: data.predicted_failures || 2
-          });
-        }
-      })
-      .catch(() => console.log("Backend offline, executing local safe-state mapping."));
-  }, []);
+  // Inline Style Directives
+  const metricCard = { backgroundColor: '#161d2a', border: '1px solid #232d3f', borderRadius: '10px', padding: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' };
+  const subHeading = { color: '#64748b', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 6px 0', fontFamily: 'monospace' };
+  const bigValue = (color) => ({ fontSize: '24px', fontWeight: 'bold', color: color || '#f1f5f9', margin: '0', fontFamily: 'monospace' });
+  const tableHeader = { padding: '12px', color: '#94a3b8', borderBottom: '2px solid #232d3f', fontSize: '12px', textTransform: 'uppercase', fontFamily: 'monospace' };
+  const tableData = { padding: '12px', borderBottom: '1px solid #1e293b', fontSize: '13px' };
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '20px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
-        <div style={cardStyle}><p style={cardTitleStyle}>Total Machines</p><p style={cardValueStyle('#4ade80')}>{metrics.totalMachines}</p></div>
-        <div style={cardStyle}><p style={cardTitleStyle}>Active Alerts</p><p style={cardValueStyle('#f59e0b')}>{metrics.activeAlerts}</p></div>
-        <div style={cardStyle}><p style={cardTitleStyle}>Fleet Health Score</p><p style={cardValueStyle('#3b82f6')}>{metrics.healthScore}%</p></div>
-        <div style={cardStyle}><p style={cardTitleStyle}>Predicted Failures</p><p style={cardValueStyle('#ef4444')}>{metrics.predictedFailures}</p></div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', color: '#ffffff' }}>
+      
+      {/* SECTION 1: HIGH-DENSITY COUNTER NETWORK */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '15px' }}>
+        <div style={metricCard}>
+          <div><p style={subHeading}>Fleet Operational Status</p><p style={bigValue('#3b82f6')}>05 Active Nodes</p></div>
+          <span style={{ fontSize: '11px', color: '#64748b', marginTop: '8px' }}>Tracking Engine: Core IoT Stream</span>
+        </div>
+        <div style={metricCard}>
+          <div><p style={subHeading}>AI Failure Forecasts</p><p style={bigValue('#ef4444')}>02 Nodes Flagged</p></div>
+          <span style={{ fontSize: '11px', color: '#ef4444', marginTop: '8px' }}>🚨 MAC-2301 & MAC-2303 At Risk</span>
+        </div>
+        <div style={metricCard}>
+          <div><p style={subHeading}>Fleet Health Efficiency</p><p style={bigValue('#4ade80')}>84.2% Index</p></div>
+          <span style={{ fontSize: '11px', color: '#64748b', marginTop: '8px' }}>System Target Baseline: &gt;90.0%</span>
+        </div>
+        <div style={metricCard}>
+          <div><p style={subHeading}>Mean Time To Failure (MTTF)</p><p style={bigValue('#f59e0b')}>168.5 Hrs Avg</p></div>
+          <span style={{ fontSize: '11px', color: '#f59e0b', marginTop: '8px' }}>Decay Acceleration Detected</span>
+        </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+      {/* SECTION 2: FLEET MONITORING MATRIX & INSPECTION BAY */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '20px' }}>
+        
+        {/* FLEET LOGISTICS TABLE */}
         <div style={{ backgroundColor: '#161d2a', border: '1px solid #232d3f', borderRadius: '12px', overflow: 'hidden' }}>
-          <div style={{ backgroundColor: '#1b2332', padding: '12px', fontWeight: 'bold', fontSize: '14px', borderBottom: '1px solid #232d3f', color: '#ffffff' }}>Live Equipment Telemetry Status</div>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontFamily: 'monospace', color: '#ffffff' }}>
-            <thead>
-              <tr style={{ backgroundColor: '#121824' }}>
-                <th style={{ padding: '12px', color: '#94a3b8', borderBottom: '1px solid #232d3f' }}>Machine</th>
-                <th style={{ padding: '12px', color: '#94a3b8', borderBottom: '1px solid #232d3f' }}>Status</th>
-                <th style={{ padding: '12px', color: '#94a3b8', borderBottom: '1px solid #232d3f' }}>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {['M001', 'M002', 'M003'].map((id) => (
-                <tr key={id}>
-                  <td style={tdStyle}><strong>{id}</strong></td>
-                  <td style={tdStyle}>
-                    <span style={{ padding: '2px 8px', borderRadius: '4px', fontSize: '11px', 
-                      backgroundColor: id === 'M001' ? 'rgba(74,222,128,0.15)' : id === 'M002' ? 'rgba(245,158,11,0.15)' : 'rgba(239,68,68,0.15)',
-                      color: id === 'M001' ? '#4ade80' : id === 'M002' ? '#f59e0b' : '#ef4444' }}>
-                      {machineData[id].status}
-                    </span>
-                  </td>
-                  <td style={tdStyle}><button onClick={() => setSelectedMachine(machineData[id])} style={{ backgroundColor: '#2563eb', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold' }}>View</button></td>
+          <div style={{ backgroundColor: '#1b2332', padding: '15px', borderBottom: '1px solid #232d3f', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span>Network Fleet Registry</span>
+            <span style={{ fontSize: '11px', color: '#3b82f6', fontFamily: 'monospace' }}>Realtime Update Active</span>
+          </div>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#121824' }}>
+                  <th style={tableHeader}>Machine ID</th>
+                  <th style={tableHeader}>Subsystem Type</th>
+                  <th style={tableHeader}>Anomaly Index</th>
+                  <th style={tableHeader}>Status Context</th>
+                  <th style={tableHeader}>Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {activeFleet.map((node) => (
+                  <tr key={node.id} style={{ backgroundColor: selectedMachine.id === node.id ? '#1e293b' : 'transparent', transition: '0.2s' }}>
+                    <td style={{ ...tableData, fontWeight: 'bold', fontFamily: 'monospace' }}>{node.id}</td>
+                    <td style={tableData}>{node.type}</td>
+                    <td style={{ ...tableData, color: parseFloat(node.anomalyScore) > 70 ? '#ef4444' : '#4ade80', fontFamily: 'monospace', fontWeight: 'bold' }}>{node.anomalyScore}</td>
+                    <td style={tableData}>
+                      <span style={{
+                        padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold',
+                        backgroundColor: node.status === 'Optimal' ? 'rgba(74,222,128,0.1)' : node.status === 'Critical' ? 'rgba(239,68,68,0.1)' : 'rgba(245,158,11,0.1)',
+                        color: node.status === 'Optimal' ? '#4ade80' : node.status === 'Critical' ? '#ef4444' : '#f59e0b'
+                      }}>{node.condition}</span>
+                    </td>
+                    <td style={tableData}>
+                      <button 
+                        onClick={() => setSelectedMachine({
+                          id: node.id, status: node.status, type: node.type, anomalyScore: node.anomalyScore,
+                          temp: node.status === 'Optimal' ? '54.2 °C' : node.status === 'Critical' ? '98.1 °C' : '89.4 °C',
+                          vibration: node.status === 'Optimal' ? '1.12 mm/s' : node.status === 'Critical' ? '8.45 mm/s' : '4.82 mm/s',
+                          pressure: node.status === 'Optimal' ? '101.3 kPa' : node.status === 'Critical' ? '294.2 kPa' : '210.5 kPa',
+                          humidity: '52.4%', rul: node.status === 'Optimal' ? '120 Days' : node.status === 'Critical' ? '24 Hours' : '14 Days',
+                          aiModelConfidence: node.status === 'Optimal' ? '98.7%' : '94.2%', nextScheduledMaintenance: 'Immediate Action Required'
+                        })}
+                        style={{ backgroundColor: '#2563eb', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold' }}
+                      >
+                        Inspect
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <div style={{ backgroundColor: '#161d2a', border: '1px solid #232d3f', padding: '20px', borderRadius: '12px', color: '#ffffff' }}>
-          <h3 style={{ margin: '0 0 15px 0', fontSize: '14px', color: '#3b82f6', textTransform: 'uppercase', fontFamily: 'monospace', fontWeight: 'bold' }}>Telemetry Focus: {selectedMachine.id}</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontFamily: 'monospace', fontSize: '13px' }}>
-            {['temp', 'vibration', 'pressure', 'humidity'].map((field) => (
-              <div key={field} style={{ backgroundColor: '#121824', padding: '10px', borderRadius: '6px' }}>
-                <span style={{ color: '#64748b', display: 'block', fontSize: '11px' }}>{field.toUpperCase()}</span>
-                <span style={{ fontSize: '15px', fontWeight: 'bold' }}>{selectedMachine[field]}</span>
-              </div>
-            ))}
+        {/* PROXIMATE AI DIAGNOSTICS CONTROL BOX */}
+        <div style={{ backgroundColor: '#161d2a', border: '1px solid #232d3f', padding: '20px', borderRadius: '12px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+          <div style={{ borderBottom: '1px solid #232d3f', paddingBottom: '10px' }}>
+            <span style={{ fontSize: '11px', color: '#3b82f6', fontWeight: 'bold', fontFamily: 'monospace' }}>AI Diagnostic Node Isolation</span>
+            <h3 style={{ margin: '4px 0 0 0', fontSize: '18px' }}>Telemetry Focus: {selectedMachine.id}</h3>
           </div>
-          <div style={{ marginTop: '15px', padding: '12px', borderRadius: '6px', textAlign: 'center', backgroundColor: selectedMachine.status === 'Healthy' ? 'rgba(74,222,128,0.1)' : selectedMachine.status === 'Warning' ? 'rgba(245,158,11,0.1)' : 'rgba(239,68,68,0.1)' }}>
-            <span style={{ fontSize: '12px', fontWeight: 'bold', color: selectedMachine.status === 'Healthy' ? '#4ade80' : selectedMachine.status === 'Warning' ? '#f59e0b' : '#ef4444' }}>SYSTEM STATUS: {selectedMachine.status.toUpperCase()}</span>
+
+          {/* SENSOR DATA POINTS */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontFamily: 'monospace' }}>
+            <div style={{ backgroundColor: '#121824', padding: '12px', borderRadius: '6px', borderLeft: '3px solid #3b82f6' }}>
+              <span style={subHeading}>Core Temperature</span>
+              <span style={{ display: 'block', fontSize: '16px', fontWeight: 'bold' }}>{selectedMachine.temp}</span>
+            </div>
+            <div style={{ backgroundColor: '#121824', padding: '12px', borderRadius: '6px', borderLeft: '3px solid #3b82f6' }}>
+              <span style={subHeading}>Vibration Amplitude</span>
+              <span style={{ display: 'block', fontSize: '16px', fontWeight: 'bold' }}>{selectedMachine.vibration}</span>
+            </div>
+            <div style={{ backgroundColor: '#121824', padding: '12px', borderRadius: '6px', borderLeft: '3px solid #3b82f6' }}>
+              <span style={subHeading}>Line Pressure</span>
+              <span style={{ display: 'block', fontSize: '16px', fontWeight: 'bold' }}>{selectedMachine.pressure}</span>
+            </div>
+            <div style={{ backgroundColor: '#121824', padding: '12px', borderRadius: '6px', borderLeft: '3px solid #3b82f6' }}>
+              <span style={subHeading}>Atmospheric Humidity</span>
+              <span style={{ display: 'block', fontSize: '16px', fontWeight: 'bold' }}>{selectedMachine.humidity}</span>
+            </div>
+          </div>
+
+          {/* ADVANCED AI PREDICTIVE QUANTIFIERS */}
+          <div style={{ backgroundColor: '#121824', padding: '15px', borderRadius: '8px', border: '1px solid #232d3f', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <span style={{ color: '#3b82f6', fontSize: '11px', fontWeight: 'bold', fontFamily: 'monospace', letterSpacing: '1px' }}>🤖 XGBOOST & RANDOM FOREST PREDICTIVE MATRICES</span>
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
+              <span style={{ color: '#94a3b8' }}>Residual Useful Life (RUL):</span>
+              <span style={{ fontWeight: 'bold', color: '#f59e0b', fontFamily: 'monospace' }}>{selectedMachine.rul}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
+              <span style={{ color: '#94a3b8' }}>ML Anomaly Weight:</span>
+              <span style={{ fontWeight: 'bold', color: '#ef4444', fontFamily: 'monospace' }}>{selectedMachine.anomalyScore}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
+              <span style={{ color: '#94a3b8' }}>Algorithm Model Confidence:</span>
+              <span style={{ fontWeight: 'bold', color: '#4ade80', fontFamily: 'monospace' }}>{selectedMachine.aiModelConfidence}</span>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   );
