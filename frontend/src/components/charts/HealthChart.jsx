@@ -12,7 +12,6 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
-// Register Chart.js modules
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -25,55 +24,69 @@ ChartJS.register(
 );
 
 export default function HealthChart() {
-  // Chart Configuration Options
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
     plugins: {
       legend: {
         display: true,
         position: 'top',
         labels: { color: '#94a3b8', font: { family: 'monospace', size: 11 } }
-      },
-      tooltip: { enabled: true }
+      }
     },
     scales: {
       x: {
-        grid: { color: '#232d3f' },
+        grid: { color: '#1e293b' },
         ticks: { color: '#94a3b8', font: { family: 'monospace' } }
       },
       y: {
-        min: 0,
-        max: 100,
+        type: 'linear',
+        display: true,
+        position: 'left',
         grid: { color: '#232d3f' },
-        ticks: { color: '#94a3b8', font: { family: 'monospace' }, callback: (value) => `${value}%` }
+        ticks: { color: '#3b82f6', font: { family: 'monospace' } },
+        title: { display: true, text: 'Temperature (°C)', color: '#3b82f6', font: { family: 'monospace' } }
+      },
+      y1: {
+        type: 'linear',
+        display: true,
+        position: 'right',
+        grid: { drawOnChartArea: false },
+        ticks: { color: '#ef4444', font: { family: 'monospace' } },
+        title: { display: true, text: 'Vibration (mm/s)', color: '#ef4444', font: { family: 'monospace' } }
       }
     }
   };
 
-  // Live Core Data Map Arrays
   const data = {
-    labels: ['Cycle 10', 'Cycle 20', 'Cycle 30', 'Cycle 40', 'Cycle 50', 'Cycle 60'],
+    labels: ['10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM'],
     datasets: [
       {
-        label: 'Machine Health Index',
-        data: [95, 92, 88, 72, 55, 45],
-        borderColor: '#2563eb',
-        backgroundColor: 'rgba(37, 99, 235, 0.1)',
-        borderWidth: 3,
-        tension: 0.4,
-        fill: true,
-        pointBackgroundColor: '#ef4444',
-        pointBorderColor: '#ffffff',
-        pointHoverRadius: 7
+        label: 'Sensor Node Temp (°C)',
+        data: [62, 65, 78, 89, 94, 98],
+        borderColor: '#3b82f6',
+        backgroundColor: 'rgba(59, 130, 246, 0.05)',
+        yAxisID: 'y',
+        tension: 0.3
+      },
+      {
+        label: 'Vibration Amplitude (mm/s)',
+        data: [1.2, 1.5, 3.1, 4.8, 6.2, 8.45],
+        borderColor: '#ef4444',
+        backgroundColor: 'rgba(239, 68, 68, 0.05)',
+        yAxisID: 'y1',
+        tension: 0.3
       }
     ]
   };
 
   return (
-    <div style={{ height: '220px', width: '100%', marginTop: '15px' }}>
+    <div style={{ height: '280px', width: '100%', marginTop: '15px' }}>
       <Line options={options} data={data} />
     </div>
   );
 }
-
