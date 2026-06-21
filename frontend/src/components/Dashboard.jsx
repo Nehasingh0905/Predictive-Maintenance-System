@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function Dashboard() {
   // Advanced AI Operational Focus State
@@ -16,13 +16,13 @@ export default function Dashboard() {
   });
 
   // Comprehensive Fleet Database Array
-  const activeFleet = [
+  const [activeFleet, setActiveFleet] = useState([
     { id: 'MAC-2301', status: 'Action Required', type: 'CNC Milling', anomalyScore: '78.4%', condition: 'Degrading' },
     { id: 'MAC-2302', status: 'Optimal', type: 'Hydraulic Press', anomalyScore: '12.1%', condition: 'Stable' },
     { id: 'MAC-2303', status: 'Critical', type: 'Robotic Arm Assembly', anomalyScore: '94.8%', condition: 'Imminent Failure' },
     { id: 'MAC-2304', status: 'Optimal', type: 'Conveyor Drive Train', anomalyScore: '05.3%', condition: 'Stable' },
     { id: 'MAC-2305', status: 'Maintenance', type: 'Pneumatic Drill Node', anomalyScore: '45.0%', condition: 'Under Calibration' }
-  ];
+  ]);
 
   // Inline Style Directives
   const metricCard = { backgroundColor: '#161d2a', border: '1px solid #232d3f', borderRadius: '10px', padding: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' };
@@ -30,6 +30,29 @@ export default function Dashboard() {
   const bigValue = (color) => ({ fontSize: '24px', fontWeight: 'bold', color: color || '#f1f5f9', margin: '0', fontFamily: 'monospace' });
   const tableHeader = { padding: '12px', color: '#94a3b8', borderBottom: '2px solid #232d3f', fontSize: '12px', textTransform: 'uppercase', fontFamily: 'monospace' };
   const tableData = { padding: '12px', borderBottom: '1px solid #1e293b', fontSize: '13px' };
+
+  useEffect(() => {
+  const interval = setInterval(() => {
+    setActiveFleet(prev =>
+      prev.map(machine => ({
+        ...machine,
+        anomalyScore:
+          (
+            Math.max(
+              0,
+              Math.min(
+                100,
+                parseFloat(machine.anomalyScore) +
+                (Math.random() * 10 - 5)
+              )
+            )
+          ).toFixed(1) + '%'
+      }))
+    );
+  }, 3000);
+
+  return () => clearInterval(interval);
+}, []);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', color: '#ffffff' }}>
