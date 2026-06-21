@@ -1,3 +1,4 @@
+import Sidebar from "./components/Sidebar";
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
@@ -44,13 +45,40 @@ export default function App() {
   if (isLoading) return <LoadingScreen />;
 
   return (
-    <div style={{ backgroundColor: '#0f141c', minHeight: '100vh', padding: '20px' }}>
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
-      <main style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        {activeTab === 'dashboard' && <Dashboard />}
-        {activeTab === 'analytics' && <Analytics />}
-        {activeTab === 'alerts' && <Alerts />}
+   <div
+    style={{
+      display: "flex",
+      backgroundColor: "#0f141c",
+      minHeight: "100vh",
+    }}
+   >
+    <Sidebar
+      activeTab={activeTab}
+      setActiveTab={setActiveTab}
+    />
+
+    <div
+      style={{
+        flex: 1,
+        padding: "20px",
+      }}
+    >
+      <Header
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
+
+      <main
+        style={{
+          maxWidth: "1400px",
+          margin: "0 auto",
+        }}
+      >
+        {activeTab === "dashboard" && <Dashboard />}
+        {activeTab === "analytics" && <Analytics />}
+        {activeTab === "alerts" && <Alerts />}
       </main>
     </div>
-  );
+  </div>
+);
 }
