@@ -204,46 +204,100 @@ def get_ml_module(module_name: str):
     return None
 
 
-def calculate_anomaly(temperature: float, vibration: float) -> tuple[float, str]:
-    """Helper to detect anomalies using Akhil's model or deterministic fallback.
+def calculate_anomaly(
+        temperature: float,
+        pressure: float,
+        vibration: float,
+        humidity: float,
+        current: float
+    ) -> tuple[float, str]:
+        """Detect anomalies using the trained Isolation Forest model.
+    
+        Returns:
+          tuple (anomaly_score, status)
+        """
 
-    Returns:
-        tuple (anomaly_score, status) where status is 'Normal' or 'Abnormal'.
+        ml_module = get_ml_module("anomaly_detection")
+
+        if ml_module and hasattr(ml_module, "detect_anomaly"):
+            try:
+              return ml_module.detect_anomaly(
+                 temperature,
+                 pressure,
+                 vibration,
+                 humidity,
+                 current
+            )
+            except Exception as e:
+              print(f"Anomaly Detection Error: {e}")
+
+        # Fallback logic
+        score = 0.05
+
+        if vibration > 4.2:
+           score += 0.30
+
+        if temperature > 85:
+           score += 0.30
+
+        if current > 15:
+           score += 0.20
+
+        if pressure > 50:
+           score += 0.10
+
+        if humidity > 80:
+           score += 0.10
+
+        status = "Abnormal" if score >= 0.5 else "Normal"
+
+        return score, status
+
+
+def calculate_failure_probability(
+    temperature: float,
+    pressure: float,
+    vibration: float,
+    humidity: float,
+    current: float
+) -> float:
     """
-    ml_module = get_ml_module("anomaly_detection")
-    if ml_module and hasattr(ml_module, "detect_anomaly"):
-        try:
-            # Assumes function signature: detect_anomaly(temp, vib) -> (score, status)
-            return ml_module.detect_anomaly(temperature, vibration)
-        except Exception:
-            pass
+    Predict failure probability using the trained XGBoost model.
+    Falls back to deterministic rules if the ML model is unavailable.
+    """
 
-    # Fallback deterministic rules matching typical NASA C-MAPSS dataset characteristics
-    score = 0.05
-    if vibration > 4.2:
-        score += 0.45
-    if temperature > 85.0:
-        score += 0.45
-
-    status_str = "Abnormal" if score >= 0.5 else "Normal"
-    return score, status_str
-
-
-def calculate_failure_probability(vibration: float, current: float) -> float:
-    """Helper to calculate failure probability using Akhil's model or deterministic fallback."""
     ml_module = get_ml_module("failure_prediction")
+
     if ml_module and hasattr(ml_module, "predict_failure"):
         try:
-            return ml_module.predict_failure(vibration, current)
-        except Exception:
-            pass
+            return ml_module.predict_failure(
+                temperature,
+                pressure,
+                vibration,
+                humidity,
+                current
+            )
+        except Exception as e:
+            print(f"Failure Prediction Error: {e}")
 
-    # Fallback failure probability calculation
-    prob = 0.1
+    # Fallback logic
+    prob = 0.10
+
     if vibration > 4.0:
-        prob += 0.35
+        prob += 0.30
+
     if current > 16.0:
-        prob += 0.45
+        prob += 0.30
+
+    if temperature > 85:
+        prob += 0.15
+
+    if pressure > 50:
+        prob += 0.10
+
+    if humidity > 80:
+        prob += 0.05
+
     return min(prob, 0.99)
 
 
@@ -427,8 +481,20 @@ def predict(request: PredictRequest, db: Session = Depends(get_db)):
         )
 
     # Calculate values
-    anomaly_score, _ = calculate_anomaly(latest_sensor.temperature, latest_sensor.vibration)
-    fail_prob = calculate_failure_probability(latest_sensor.vibration, latest_sensor.current)
+    anomaly_score, _ = calculate_anomaly(
+      latest_sensor.temperature,
+      latest_sensor.pressure,
+      latest_sensor.vibration,
+      latest_sensor.humidity,
+      latest_sensor.current
+    )
+    fail_prob = calculate_failure_probability(
+      latest_sensor.temperature,
+      latest_sensor.pressure,
+      latest_sensor.vibration,
+      latest_sensor.humidity,
+      latest_sensor.current
+    )
     rul_value = calculate_rul(request.machine_id, db, latest_sensor.__dict__)
 
     # Save prediction

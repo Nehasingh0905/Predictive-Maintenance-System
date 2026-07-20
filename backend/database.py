@@ -14,7 +14,7 @@ from sqlalchemy.orm import sessionmaker
 # using a default connection string if none is defined.
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "postgresql://postgres:postgres@localhost:5432/predictive_maintenance"
+    "postgresql://postgres:akhil@localhost:5432/predictive_maintenance"
 )
 
 # Create the SQLAlchemy engine for PostgreSQL database connection.

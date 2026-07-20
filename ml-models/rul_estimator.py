@@ -33,9 +33,21 @@ Project: AI-Driven Predictive Maintenance System
 import numpy as np
 import joblib
 
+# Load the trained Random Forest RUL model
 model = joblib.load("random_forest_rul.pkl")
 
 def predict_rul(features):
+    """
+    Predict Remaining Useful Life (RUL) using the trained Random Forest model.
+
+    Parameters:
+        features (list): 18 input features prepared by the backend.
+
+    Returns:
+        float: Predicted RUL
+    """
     features = np.array(features).reshape(1, -1)
+
     prediction = model.predict(features)
-    return prediction[0]
+
+    return float(prediction[0])
