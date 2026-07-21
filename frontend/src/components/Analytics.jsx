@@ -5,11 +5,44 @@ export default function Analytics() {
   const [selectedModel, setSelectedModel] = useState('XGBoost v2.4');
   
   const containerStyle = { display: 'flex', flexDirection: 'column', gap: '20px', color: '#ffffff' };
-  const panelStyle = { backgroundColor: '#161d2a', border: '1px solid #232d3f', padding: '20px', borderRadius: '12px' };
+  const panelStyle = {
+  backgroundColor: '#1e1b4b',
+  border: '1px solid #4f46e5',
+  padding: '20px',
+  borderRadius: '12px',
+  boxShadow: '0 4px 12px rgba(0,0,0,0.25)'
+};
   const tableHeader = { padding: '10px', color: '#64748b', borderBottom: '2px solid #232d3f', fontSize: '11px', textTransform: 'uppercase', fontFamily: 'monospace' };
 
   return (
     <div style={containerStyle}>
+      <div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
+    gap: "15px"
+  }}
+>
+  <div style={panelStyle}>
+    <h4 style={{ color: "#94a3b8" }}>Model Accuracy</h4>
+    <h2 style={{ color: "#4ade80" }}>96.2%</h2>
+  </div>
+
+  <div style={panelStyle}>
+    <h4 style={{ color: "#94a3b8" }}>Failure Predictions</h4>
+    <h2 style={{ color: "#ef4444" }}>12</h2>
+  </div>
+
+  <div style={panelStyle}>
+    <h4 style={{ color: "#94a3b8" }}>Average RUL</h4>
+    <h2 style={{ color: "#f59e0b" }}>168 hrs</h2>
+  </div>
+
+  <div style={panelStyle}>
+    <h4 style={{ color: "#94a3b8" }}>Active Models</h4>
+    <h2 style={{ color: "#3b82f6" }}>3</h2>
+  </div>
+</div>
       
       {/* TWO-COLUMN TOP MATRIX */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '20px' }}>
@@ -36,9 +69,9 @@ export default function Analytics() {
                 key={model}
                 onClick={() => setSelectedModel(model)}
                 style={{
-                  backgroundColor: selectedModel === model ? '#2563eb' : '#121824',
+                  backgroundColor: selectedModel === model ? '#7c3aed' : '#312e81',
                   color: selectedModel === model ? '#ffffff' : '#94a3b8',
-                  border: '1px solid #232d3f', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold', fontFamily: 'monospace'
+                  border: '1px solid #4f46e5', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold', fontFamily: 'monospace'
                 }}
               >
                 {model}

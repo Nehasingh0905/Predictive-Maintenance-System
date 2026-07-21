@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import MachineHealth from "./MachineHealth";
 
 export default function Dashboard() {
   // Advanced AI Operational Focus State
@@ -25,7 +26,16 @@ export default function Dashboard() {
   ]);
 
   // Inline Style Directives
-  const metricCard = { backgroundColor: '#161d2a', border: '1px solid #232d3f', borderRadius: '10px', padding: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' };
+  const metricCard = {
+  backgroundColor: '#1a2332',
+  border: '1px solid #334155',
+  borderRadius: '12px',
+  padding: '18px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  boxShadow: '0 4px 12px rgba(0,0,0,0.25)'
+};
   const subHeading = { color: '#64748b', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 6px 0', fontFamily: 'monospace' };
   const bigValue = (color) => ({ fontSize: '24px', fontWeight: 'bold', color: color || '#f1f5f9', margin: '0', fontFamily: 'monospace' });
   const tableHeader = { padding: '12px', color: '#94a3b8', borderBottom: '2px solid #232d3f', fontSize: '12px', textTransform: 'uppercase', fontFamily: 'monospace' };
@@ -33,22 +43,32 @@ export default function Dashboard() {
 
   useEffect(() => {
   const interval = setInterval(() => {
-    setActiveFleet(prev =>
-      prev.map(machine => ({
+  setActiveFleet(prev =>
+    prev.map(machine => {
+      const newScore = Math.max(
+        0,
+        Math.min(
+          100,
+          parseFloat(machine.anomalyScore) +
+          (Math.random() * 10 - 5)
+        )
+      );
+
+      let newStatus = "Optimal";
+
+      if (newScore > 70) {
+        newStatus = "Critical";
+      } else if (newScore > 30) {
+        newStatus = "Warning";
+      }
+
+      return {
         ...machine,
-        anomalyScore:
-          (
-            Math.max(
-              0,
-              Math.min(
-                100,
-                parseFloat(machine.anomalyScore) +
-                (Math.random() * 10 - 5)
-              )
-            )
-          ).toFixed(1) + '%'
-      }))
-    );
+        anomalyScore: newScore.toFixed(1) + "%",
+        status: newStatus
+      };
+    })
+  ); 
   }, 3000);
 
   return () => clearInterval(interval);
@@ -60,19 +80,83 @@ export default function Dashboard() {
       {/* SECTION 1: HIGH-DENSITY COUNTER NETWORK */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '15px' }}>
         <div style={metricCard}>
-          <div><p style={subHeading}>Fleet Operational Status</p><p style={bigValue('#3b82f6')}>05 Active Nodes</p></div>
+          <div><p style={{...subHeading,fontSize:"12px"}}>
+📡 Fleet Operational Status
+</p>
+
+<p style={bigValue("#60A5FA")}>
+05 Active Nodes
+</p>
+
+<p
+style={{
+marginTop:"8px",
+fontSize:"12px",
+color:"#94A3B8"
+}}
+>
+Live Industrial IoT Monitoring
+</p></div>
           <span style={{ fontSize: '11px', color: '#64748b', marginTop: '8px' }}>Tracking Engine: Core IoT Stream</span>
         </div>
         <div style={metricCard}>
-          <div><p style={subHeading}>AI Failure Forecasts</p><p style={bigValue('#ef4444')}>02 Nodes Flagged</p></div>
+          <div><p style={{...subHeading,fontSize:"12px"}}>
+🚨 AI Failure Forecast
+</p>
+
+<p style={bigValue("#EF4444")}>
+02 Machines
+</p>
+
+<p
+style={{
+marginTop:"8px",
+fontSize:"12px",
+color:"#FCA5A5"
+}}
+>
+Immediate Maintenance Required
+</p></div>
           <span style={{ fontSize: '11px', color: '#ef4444', marginTop: '8px' }}>🚨 MAC-2301 & MAC-2303 At Risk</span>
         </div>
         <div style={metricCard}>
-          <div><p style={subHeading}>Fleet Health Efficiency</p><p style={bigValue('#4ade80')}>84.2% Index</p></div>
+          <div><p style={{...subHeading,fontSize:"12px"}}>
+📈 Fleet Health Index
+</p>
+
+<p style={bigValue("#22C55E")}>
+84.2%
+</p>
+
+<p
+style={{
+marginTop:"8px",
+fontSize:"12px",
+color:"#94A3B8"
+}}
+>
+Overall Equipment Performance
+</p></div>
           <span style={{ fontSize: '11px', color: '#64748b', marginTop: '8px' }}>System Target Baseline: &gt;90.0%</span>
         </div>
         <div style={metricCard}>
-          <div><p style={subHeading}>Mean Time To Failure (MTTF)</p><p style={bigValue('#f59e0b')}>168.5 Hrs Avg</p></div>
+          <div><p style={{...subHeading,fontSize:"12px"}}>
+⏳ Mean Time To Failure
+</p>
+
+<p style={bigValue("#F59E0B")}>
+168.5 Hrs
+</p>
+
+<p
+style={{
+marginTop:"8px",
+fontSize:"12px",
+color:"#94A3B8"
+}}
+>
+Predicted Remaining Lifetime
+</p></div>
           <span style={{ fontSize: '11px', color: '#f59e0b', marginTop: '8px' }}>Decay Acceleration Detected</span>
         </div>
       </div>
@@ -81,15 +165,30 @@ export default function Dashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '20px' }}>
         
         {/* FLEET LOGISTICS TABLE */}
-        <div style={{ backgroundColor: '#161d2a', border: '1px solid #232d3f', borderRadius: '12px', overflow: 'hidden' }}>
+        <div style={{ backgroundColor: '#1e1b4b', border: '1px solid #232d3f', borderRadius: '12px', overflow: 'hidden' }}>
           <div style={{ backgroundColor: '#1b2332', padding: '15px', borderBottom: '1px solid #232d3f', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span>Network Fleet Registry</span>
-            <span style={{ fontSize: '11px', color: '#3b82f6', fontFamily: 'monospace' }}>Realtime Update Active</span>
+            <span
+style={{
+fontSize:"22px",
+fontWeight:"700",
+color:"#F8FAFC"
+}}
+>
+📡 Network Fleet Registry
+</span>
+            <span style={{ 
+fontSize:"12px",
+padding:"6px 12px",
+background:"#1E3A5F",
+borderRadius:"20px",
+color:"#60A5FA",
+fontWeight:"600"
+ }}>🟢 Live Monitoring</span>
           </div>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
-                <tr style={{ backgroundColor: '#121824' }}>
+                <tr style={{ background:"linear-gradient(90deg,#2563EB,#4338CA)" }}>
                   <th style={tableHeader}>Machine ID</th>
                   <th style={tableHeader}>Subsystem Type</th>
                   <th style={tableHeader}>Anomaly Index</th>
@@ -99,16 +198,59 @@ export default function Dashboard() {
               </thead>
               <tbody>
                 {activeFleet.map((node) => (
-                  <tr key={node.id} style={{ backgroundColor: selectedMachine.id === node.id ? '#1e293b' : 'transparent', transition: '0.2s' }}>
+                  <tr
+  key={node.id}
+  onMouseEnter={(e) => {
+    if (selectedMachine.id !== node.id) {
+      e.currentTarget.style.background = "#23324A";
+    }
+  }}
+  onMouseLeave={(e) => {
+    if (selectedMachine.id !== node.id) {
+      e.currentTarget.style.background = "transparent";
+    }
+  }}
+  style={{
+    backgroundColor:
+      selectedMachine.id === node.id
+        ? "#1E3A5F"
+        : "transparent",
+    transition: "0.3s",
+    cursor: "pointer"
+  }}
+>
                     <td style={{ ...tableData, fontWeight: 'bold', fontFamily: 'monospace' }}>{node.id}</td>
                     <td style={tableData}>{node.type}</td>
                     <td style={{ ...tableData, color: parseFloat(node.anomalyScore) > 70 ? '#ef4444' : '#4ade80', fontFamily: 'monospace', fontWeight: 'bold' }}>{node.anomalyScore}</td>
                     <td style={tableData}>
                       <span style={{
-                        padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold',
+                        padding: '2px 8px', borderRadius: '4px', fontSize: '28px',letterSpacing: '0.5px', fontWeight: 'bold',
                         backgroundColor: node.status === 'Optimal' ? 'rgba(74,222,128,0.1)' : node.status === 'Critical' ? 'rgba(239,68,68,0.1)' : 'rgba(245,158,11,0.1)',
                         color: node.status === 'Optimal' ? '#4ade80' : node.status === 'Critical' ? '#ef4444' : '#f59e0b'
-                      }}>{node.condition}</span>
+                      }}>
+    <span
+      style={{
+       padding: "4px 10px",
+       borderRadius: "6px",
+       fontWeight: "bold",
+       fontSize: "12px",
+       color:
+         node.status === "Critical"
+            ? "#ef4444"
+            : node.status === "Warning"
+            ? "#f59e0b"
+            : "#22c55e",
+        backgroundColor:
+          node.status === "Critical"
+            ? "rgba(239,68,68,0.15)"
+            : node.status === "Warning"
+            ? "rgba(245,158,11,0.15)"
+            : "rgba(34,197,94,0.15)"
+      }}
+   >
+      {node.status}
+   </span>
+</span>
                     </td>
                     <td style={tableData}>
                       <button 
@@ -120,7 +262,17 @@ export default function Dashboard() {
                           humidity: '52.4%', rul: node.status === 'Optimal' ? '120 Days' : node.status === 'Critical' ? '24 Hours' : '14 Days',
                           aiModelConfidence: node.status === 'Optimal' ? '98.7%' : '94.2%', nextScheduledMaintenance: 'Immediate Action Required'
                         })}
-                        style={{ backgroundColor: '#2563eb', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold' }}
+                        style={{
+background:"#2563EB",
+color:"#fff",
+border:"none",
+padding:"8px 18px",
+borderRadius:"8px",
+fontWeight:"600",
+cursor:"pointer",
+boxShadow:"0 4px 12px rgba(37,99,235,.35)",
+transition:"0.3s"
+}}
                       >
                         Inspect
                       </button>
@@ -133,7 +285,7 @@ export default function Dashboard() {
         </div>
 
         {/* PROXIMATE AI DIAGNOSTICS CONTROL BOX */}
-        <div style={{ backgroundColor: '#161d2a', border: '1px solid #232d3f', padding: '20px', borderRadius: '12px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+        <div style={{ backgroundColor: '#161d2a', border: '1px solid #4f46e5', padding: '20px', borderRadius: '12px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
           <div style={{ borderBottom: '1px solid #232d3f', paddingBottom: '10px' }}>
             <span style={{ fontSize: '11px', color: '#3b82f6', fontWeight: 'bold', fontFamily: 'monospace' }}>AI Diagnostic Node Isolation</span>
             <h3 style={{ margin: '4px 0 0 0', fontSize: '18px' }}>Telemetry Focus: {selectedMachine.id}</h3>
@@ -177,8 +329,50 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+              </div>
 
+      {/* LIVE ALERTS */}
+      <div
+        style={{
+          backgroundColor: "#161d2a",
+          border: "1px solid #232d3f",
+          borderRadius: "12px",
+          padding: "20px"
+        }}
+      >
+        <h3 style={{ color: "#ef4444" }}>🚨 Live Alerts</h3>
+
+        {activeFleet
+          .filter(machine => parseFloat(machine.anomalyScore) > 70)
+          .map(machine => (
+            <div
+              key={machine.id}
+              style={{
+                marginTop: "10px",
+                padding: "10px",
+                backgroundColor: "rgba(239,68,68,0.1)",
+                borderLeft: "4px solid #ef4444",
+                borderRadius: "6px"
+              }}
+            >
+              <strong>{machine.id}</strong> anomaly score: {machine.anomalyScore}
+            </div>
+          ))}
+        </div>
+      {/* MACHINE HEALTH MONITORING */}
+      <div
+        style={{
+          backgroundColor: "#161d2a",
+          border: "1px solid #232d3f",
+          borderRadius: "12px",
+          padding: "20px"
+        }}
+      >
+        <MachineHealth />
       </div>
+      
+
     </div>
   );
 }
+      

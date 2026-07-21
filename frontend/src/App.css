@@ -20,53 +20,61 @@ h1,
 h2 {
   text-align: center;
 }
-.summary-cards {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
+.summary-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 25px;
 }
 
 .summary-card {
-  background: #334155;
-  padding: 20px;
-  border-radius: 12px;
-  min-width: 180px;
-  text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  background: #ffffff;
+  min-width: 240px;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.08);
+  transition: .3s;
+}
+
+.summary-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 35px rgba(0,0,0,.15);
 }
 
 .summary-card h3 {
   margin: 0;
-  color: #cbd5e1;
+  color: #64748b;
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .summary-card p {
-  font-size: 28px;
-  font-weight: bold;
-  margin-top: 10px;
-  color: #38bdf8;
+  margin-top: 14px;
+  font-size: 34px;
+  font-weight: 800;
 }
 .machine-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 15px;
-}
-
-.machine-table th,
-.machine-table td {
-  border: 1px solid #475569;
-  padding: 12px;
-  text-align: center;
+  margin-top: 20px;
 }
 
 .machine-table th {
-  background-color: #1e293b;
-  color: white;
+  background: #f1f5f9;
+  color: #334155;
+  padding: 14px;
+  text-align: left;
+  font-weight: 700;
 }
 
-.machine-table tr:nth-child(even) {
-  background-color: #334155;
+.machine-table td {
+  padding: 14px;
+  border-bottom: 1px solid #e5e7eb;
+  color: #475569;
+}
+
+.machine-table tr:hover {
+  background: #f8fafc;
 }
 .healthy {
   background-color: #22c55e;
@@ -100,37 +108,51 @@ h2 {
   border-radius: 8px;
   font-weight: bold;
 }
+.sensor-container{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:18px;
+margin-top:25px;
+}
+
+.sensor-card{
+background:#ffffff;
+border:1px solid #d9dee5;
+border-radius:10px;
+padding:18px;
+box-shadow:0 2px 8px rgba(0,0,0,.05);
+transition:.2s;
+}
+
+.sensor-card:hover{
+transform:translateY(-3px);
+box-shadow:0 8px 18px rgba(0,0,0,.08);
+}
+
+.sensor-card small{
+display:block;
+font-size:13px;
+color:#6b7280;
+margin-bottom:8px;
+}
+
+.sensor-card h2{
+margin:0;
+font-size:28px;
+font-weight:700;
+}
+
+.sensor-card p{
+margin-top:8px;
+font-size:13px;
+color:#6b7280;
+font-weight:500;
+}
 
 .prediction-item span:last-child {
   color: #ef4444;
 }
-.sensor-container {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
 
-.sensor-card {
-  background-color: #334155;
-  min-width: 180px;
-  padding: 20px;
-  border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-.sensor-card h3 {
-  margin: 0;
-  color: #cbd5e1;
-}
-
-.sensor-card p {
-  font-size: 24px;
-  font-weight: bold;
-  color: #22c55e;
-  margin-top: 10px;
-}
 .summary-container {
   display: flex;
   gap: 20px;
